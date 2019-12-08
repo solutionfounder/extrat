@@ -71,9 +71,9 @@ class ProjectProject(models.Model):
         for o in self:
             superficie_tot = [
                 int((round(l.superficie or 0, 5) * 10000)) for l in o.amh_cultures_irg]
-            print(superficie_tot)
+            #print(superficie_tot)
             superficie_tot = sum(superficie_tot)
-            print(superficie_tot)
+            #print(superficie_tot)
             if superficie_tot:
                 x = superficie_tot
                 ha = int(float(x) / 10000)
@@ -83,6 +83,7 @@ class ProjectProject(models.Model):
                 ca = int(reste)
                 o.super_nette_eqp = "{} ha {} a {} ca".format(str(ha), str(a).zfill(2), str(ca).zfill(2)[:2])
 
+    label_tasks = fields.Char(default="Tâches")
     state = fields.Selection([('new', 'Nouveaux  Dossiers'),
                               ('qalified', "Dossiers en attente d'approbation"),
                               ('won', 'Dossiers approuvés'),
@@ -90,14 +91,14 @@ class ProjectProject(models.Model):
                               ('lost', 'Dessiers Pérdus')], string="state", default='new')
     douar = fields.Char(string="Douar")
     commune = fields.Char(string="Commune Rurale")
-    caidat = fields.Char(string="CAIDAT")
-    cercle = fields.Char(string="CERCLE")
+    caidat = fields.Char(string="Caidat")
+    cercle = fields.Char(string="Cercle")
     province = fields.Char(string="Province")
     amh_region_id = fields.Many2one('amh.region', string='Région')
     amh_region_lines = fields.One2many('amh.region.line', 'project_id', string="R Lignes")
     amh_cultures_irg = fields.One2many('amh.culture.irriguer', 'project_id', string="Cultures à irriguer")
     nb_cultures_irg = fields.Integer('Nb cults irrg', compute=_compute_counts)
-    cooperative = fields.Char(u"Coopérative")
+    cooperative = fields.Char(string=u"Coopérative")
     texture = fields.Selection([
         ('ARGILEUX', 'ARGILEUX'),
         ('LIMONEUX', 'LIMONEUX'),
@@ -126,6 +127,12 @@ class ProjectProject(models.Model):
     sytheses_prj = fields.One2many('amh.synthese', 'project_id', string="Syntheses")
     super_tot_printed = fields.Char("Supérficie totale")
     super_nette_eqp = fields.Char("Superficie nette à équiper", compute=_get_superfice_a_eq)
+
+    # def _get_sequence(self):
+    #     o.sequence_agric = self.env['ir.sequence'].next_by_code('project.project.agricul') or ''
+
+
+    #sequence_agric = fields.Char('Sequence', default=_get_sequence)
     sequence_agric = fields.Char('Sequence')
 
     # rapport infos
@@ -183,6 +190,13 @@ class ProjectProject(models.Model):
                     infos.append([cult.name or '-', et0 or '-', kc or '-', kr or '-', ea or '-', bb or '-'])
         return infos
 
+    @api.model
+    def create(self, vals):
+
+        vals['num_dossier_report'] = vals['sequence_agric'] = self.env['ir.sequence'].next_by_code('project.project.agricul') or ''
+
+        return super(ProjectProject, self).create(vals)
+
     @api.multi
     def write(self, vals):
         res = super(ProjectProject, self).write(vals)
@@ -191,12 +205,12 @@ class ProjectProject(models.Model):
                 line.onchange_vals_month()
         return res
 
-    @api.constrains('state')
-    def constrains_state_sequence(self):
-        for o in self:
-            if o.state == 'won':
-                seq = self.env['ir.sequence'].next_by_code('project.project.agricul') or ''
-                o.sequence_agric = seq + '/' + str(datetime.now().year)
+    # @api.constrains('state')
+    # def constrains_state_sequence(self):
+    #     for o in self:
+    #         if o.state == 'won':
+    #             seq = self.env['ir.sequence'].next_by_code('project.project.agricul') or ''
+    #             o.sequence_agric = seq + '/' + str(datetime.now().year)
 
     @api.model
     def read_group(self, domain, fields, groupby, offset=0, limit=None, orderby=False, lazy=True):

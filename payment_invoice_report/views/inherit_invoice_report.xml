@@ -3,7 +3,7 @@
     <template id="report_invoice_inherit_payment" inherit_id="account.report_invoice_document">
         <xpath expr="//div[@class='page']/p[1]" position="before">
             <t t-if='o.payment_ids'>
-                <span style="font-size:20px;font-weight: bold;">Versements déjà effectués:</span><br/>
+                <strong>Versements déjà effectués:</strong><br/>
                 <table class="table table-condensed" style="width:60%;" >
                     <thead>
 			<th>Date</th>

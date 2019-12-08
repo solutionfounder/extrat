@@ -13,7 +13,9 @@
                         <br/>
                         R.C:67723 - Patente : 45184632 - I.F : 15245464 - CNSS : 4401858 Tél/Fax : 05 24 43 26 56 -
                         <br/>
-                        Email:terreirriguee.ma@gmail.com
+                         <span t-if="o.company_id.email">Email:
+                            <span t-field="o.company_id.email"/>
+                        </span>
                         <br/>
                         <span class="pull-right" style="padding:3px;border:1px solid black;">
                             <center>
@@ -111,19 +113,19 @@ url('/agricul_core/static/fonts/calibri.ttf') format('truetype');;
                         color:#244309;
                         }
                         .mjd1{
-                        font-size: 39px;
+                        font-size: 35px;
                         font-family: sans-serif;
                         color:#288bd8;
                         }
 
                         .mjd12{
-                        font-size: 32px;
+                        font-size: 28px;
                         font-family: sans-serif;
                         color:#288bd8;
                         }
 
                         .mjd22{
-                        font-size: 28px;
+                        font-size: 26px;
                         font-family: sans-serif;
                         }
                         .mjd23{
@@ -200,13 +202,17 @@ url('/agricul_core/static/fonts/calibri.ttf') format('truetype');;
                                     <t t-esc="o.spr_nette_report"/>
                                 </b>
                             </t>
+                             <t t-if="o.address_agric_report">
+                                 <br/>
+                                <b class="doubleUnderline mjd22" style="color:brown;">
+                                    <u>Adresse complète de l’exploitation agricole:</u><br/>
+                                </b>
+                                <b class="mjd22">
+                                    <t t-esc="o.address_agric_report"/>
+                                </b>
+                            </t>
                         </p>
                     </div>
-                    <br/>
-                    <br/>
-                    <br/>
-                    <br/>
-                    <br/>
                     <br/>
                     <br/>
                     <center class="mjd12">
@@ -219,9 +225,6 @@ url('/agricul_core/static/fonts/calibri.ttf') format('truetype');;
                             <span t-esc="o.num_dossier_report"/>
                         </strong>
                     </center>
-                    <br/>
-                    <br/>
-                    <br/>
                     <br/>
                     <br/>
                     <p style="text-align:right;">
@@ -266,18 +269,18 @@ url('/agricul_core/static/fonts/calibri.ttf') format('truetype');;
                                     </div>
                                 </t>
                             </t>
-                             <t t-if="o.address_agric_report">
-                                <div class="row row-eq-height" style="padding-left:15px;">
-                                <div class="col-xs-6">
-                                        <strong>Adresse complète de l’exploitation agricole:</strong>
+                             <!--<t t-if="o.address_agric_report" class="hidden">-->
+                                <!--<div class="row row-eq-height" style="padding-left:15px;">-->
+                                <!--<div class="col-xs-6">-->
+                                        <!--<strong>Adresse complète de l’exploitation agricole:</strong>-->
 
-                                    </div>
-                                    <div class="col-xs-6">
-                                    <strong t-esc="o.address_agric_report"/>
+                                    <!--</div>-->
+                                    <!--<div classn="col-xs-6">-->
+                                    <!--<strong t-esc="o.address_agric_report"/>-->
 
-                                    </div>
-                                </div>
-                            </t>
+                                    <!--</div>-->
+                                <!--</div>-->
+                            <!--</t>-->
                             <t t-if="o.douar">
                                 <div class="col-xs-6">
                                     <strong>Douar :</strong>
